@@ -2,7 +2,7 @@
 
 ESP32-S3上でwolfSSLの耐量子TLS（ML-KEM・ML-DSA）を動かし、鍵交換・証明書・メモリ構成ごとのハンドシェイク時間、RAM使用量、通信量を実測するプロジェクト。
 
-本リポジトリは進行中で、現在はESP32-S3上での暗号演算ベンチマーク（Phase 2）を進めている。
+本リポジトリは進行中で、ESP32-S3上での暗号演算ベンチマーク（Phase 2）まで完了している。
 
 ## 研究課題と仮説
 
@@ -149,6 +149,26 @@ menuconfigで「Support for external, SPI-connected RAM」を無効にし、他�
 - 事前の仮説「16 KBを超える確保はPSRAMに置かれ、PSRAMを切るとML-DSAが速くなる」は否定された。理由：ESP-IDF版wolfSSLのメモリ確保は `pvPortMalloc` を通り、ESP-IDF v5.5ではこれが `heap_caps_malloc(size, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)`、つまり**内蔵RAMのみ**から確保する（`components/freertos/heap_idf.c`）。`WOLFSSL_TRACK_MEMORY` 有効時の `TrackMalloc` も同じく `pvPortMalloc` を使う。
 - 含意：既定の構成では、PSRAMはwolfSSLのメモリ予算を広げない。TLSで使えるのは内蔵RAMのヒープ（本ボードで約400 KB）だけであり、Phase 3ではWi-Fi・lwIPとこの内蔵RAMを取り合うことになる。wolfSSLをPSRAMに載せたい場合は、`wolfSSL_SetAllocators()` で確保関数を差し替える必要がある（今後の実験候補）。
 
+## 結果8：Keccak置換が占める時間（H3の直接計測）
+
+`patches/keccak_profile.patch`（wolfSSL v5.9.4用）を当て、`user_settings.h` に `#define WC_KECCAK_PROFILE` を追加した。このパッチは、Keccak-f[1600]置換の関数 `BlockSha3` を計測用の関数で包み、呼び出し回数とCPUサイクル数（`esp_cpu_get_cycle_count()`）を数える。そしてベンチマークの各行ごとに、1演算あたりの値を表示する。条件は結果7と同じ（-O2、SP、PSRAM無効）。全値は `results/esp32s3_keccak_profile.csv`。
+
+| 演算 | Keccak呼び出し / 演算 | Keccakが占める割合 |
+| --- | ---: | ---: |
+| ML-KEM-768 keygen | 34 | 70.4% |
+| ML-KEM-768 encap | 35 | 64.8% |
+| ML-KEM-768 decap | 44 | 62.0% |
+| TLSクライアント側（keygen + decap） | 78 | 65.4% |
+| ML-DSA-44 verify | 103 | 77.2% |
+| ML-DSA-44 sign | 184.8 | 61.2% |
+| ECDSA / X25519 / RSA（対照） | 0 | 0% |
+
+- **H3は支持された。** ML-KEMの処理時間の57〜74%（ML-KEM-768のTLSクライアント側で65%）を、SHA-3系のKeccak置換が占める。ML-DSAではさらに高く、verifyで77〜82%を占める。
+- Keccak置換1回の費用は、全演算で約23,000〜25,000サイクル（約0.1 ms）とほぼ一定。これはSHAKE128単体のベンチマーク（140サイクル/バイト × 168バイト ≈ 23,500サイクル）からの見積もりと一致する。
+- 事前の机上見積もり（ML-KEM-768 keygenで43回・約88%）は回数を多く数えすぎていた。差の9回は、公開鍵のハッシュH(ek)（1,184バイトのSHA3-256で9回の置換）にあたる。wolfSSLはこれを鍵生成の中では計算せず、別の段階（ベンチマークでは計測区間外の公開鍵デコード時）で計算している。残りの内訳は、行列Aの生成27回、ノイズ6回、G 1回で、合計34回が実測と一致する。decapの44回も、A 27回、ノイズ7回、G 1回、暗黙的拒否用のJ（1,120バイトのSHAKE256で9回）で説明できる。
+- 計測用の関数の負荷は無視できる（ML-KEM-768 keygen：計測なし4.781 ms、計測あり4.755 ms）。
+- 含意（アムダールの法則）：Keccakが占める割合をfとすると、Keccakだけを無限に速くしても、全体は最大 1/(1−f) 倍しか速くならない。ML-KEM-768のTLSクライアント側（f = 0.654）では最大約2.9倍、Keccakを2倍速くした場合は約1.5倍になる。ESP32-S3でML-KEMを高速化する余地は、多項式演算ではなくKeccakにある。
+
 ## 再現手順（Phase 1）
 
 ```bash
@@ -171,11 +191,11 @@ sudo -v && ./scripts/capture.sh
 ## 今後
 
 - [x] Phase 1：PCでの基準測定（ベンチマーク、ハンドシェイクサイズ）
-- [ ] Phase 2：ESP32-S3（N16R8）での暗号演算ベンチマーク
+- [x] Phase 2：ESP32-S3（N16R8）での暗号演算ベンチマーク
   - [x] 速度（PSRAM有効、FAST_MATH）
   - [x] 速度（コンパイラ最適化 -O2、公平性の確認その1）
   - [x] 速度（P-256をSP数学ライブラリで、公平性の確認その2）
-  - [ ] H3：ML-KEM内のKeccak置換の時間を直接計測（`patches/keccak_profile.patch` を wolfSSL v5.9.4 に適用し、`user_settings.h` に `#define WC_KECCAK_PROFILE` を追加）
+  - [x] H3：ML-KEM内のKeccak置換の時間を直接計測（`patches/keccak_profile.patch` を wolfSSL v5.9.4 に適用し、`user_settings.h` に `#define WC_KECCAK_PROFILE` を追加）
   - [x] メモリ使用量（ヒープ、PSRAM有効、FAST_MATH）
   - [x] PSRAM無効での比較
 - [ ] Phase 3：ESP32-S3 ⇔ PC間のTLSハンドシェイク測定（鍵交換×証明書）

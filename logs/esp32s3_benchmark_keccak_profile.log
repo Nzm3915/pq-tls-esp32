@@ -1,0 +1,312 @@
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark> cd C:\esp\wolfssl
+PS C:\esp\wolfssl> git apply --ignore-whitespace --check $HOME\Downloads\keccak_profile.patch
+PS C:\esp\wolfssl> git apply --ignore-whitespace $HOME\Downloads\keccak_profile.patch
+PS C:\esp\wolfssl> git diff --stat
+warning: in the working copy of 'IDE/Espressif/ESP-IDF/examples/wolfssl_benchmark/components/wolfssl/include/user_settings.h', LF will be replaced by CRLF the next time Git touches it
+ .../components/wolfssl/include/user_settings.h      | 13 +++++++++----
+ wolfcrypt/benchmark/benchmark.c                     | 18 ++++++++++++++++++
+ wolfcrypt/src/sha3.c                                | 21 +++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 4 deletions(-)
+PS C:\esp\wolfssl> cd C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark> 
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark> 
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark> 
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark> $env:IDF_PATH = 'C:\esp\v5.5.6\esp-idf';
+PS C:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark>  & 'C:\Espressif\tools\python\v5.5.6\venv\Scripts\python.exe' 'C:\esp\v5.5.6\esp-idf\tools\idf_monitor.py' -p COM4 -b 115200 --toolchain-prefix xtensa-esp32s3-elf- --make '''C:\Espressif\tools\python\v5.5.6\venv\Scripts\python.exe'' ''C:\esp\v5.5.6\esp-idf\tools\idf.py''' --target esp32s3 'c:\esp\wolfssl\IDE\Espressif\ESP-IDF\examples\wolfssl_benchmark\build\wolfssl_benchmark.elf'
+--- WARNING: GDB cannot open serial ports accessed as COMx
+--- NOTE: Using \\.\COM4 instead...
+--- esp-idf-monitor 1.10.0 on \\.\COM4 115200
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x8 (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x140c
+load:0x403c8700,len:0xc84
+load:0x403cb700,len:0x2e88
+entry 0x403c8900
+I (24) boot: ESP-IDF v5.5.6 2nd stage bootloader
+I (25) boot: compile time Oct 27 2026 00:45:57
+W (25) boot: Unicore bootloader
+I (25) boot: chip revision: v0.2
+I (28) boot.esp32s3: Boot SPI Speed : 80MHz
+I (31) boot.esp32s3: SPI Mode       : DIO
+I (35) boot.esp32s3: SPI Flash Size : 16MB
+I (39) boot: Partition Table:
+I (42) boot: ## Label            Usage          Type ST Offset   Length
+I (48) boot:  0 nvs              WiFi data        01 02 00009000 00006000
+I (54) boot:  1 phy_init         RF data          01 01 0000f000 00001000
+I (61) boot:  2 factory          factory app      00 00 00010000 00177000
+I (68) esp_image: segment 0: paddr=00010020 vaddr=3c050020 size=12b74h ( 76660) map
+I (89) esp_image: segment 1: paddr=00022b9c vaddr=3fc91200 size=024c8h (  9416) load
+I (91) esp_image: segment 2: paddr=0002506c vaddr=40374000 size=0afach ( 44972) load
+I (103) esp_image: segment 3: paddr=00030020 vaddr=42000020 size=44024h (278564) map
+I (153) esp_image: segment 4: paddr=0007404c vaddr=4037efac size=02180h (  8576) load
+I (155) esp_image: segment 5: paddr=000761d4 vaddr=50000000 size=00024h (    36) load
+I (162) boot: Loaded app from partition at offset 0x10000
+I (173) cpu_start: Unicore app
+I (174) cpu_start: Single core mode
+I (182) cpu_start: GPIO 44 and 43 are used as console UART I/O pins
+I (182) cpu_start: Pro cpu start user code
+I (182) cpu_start: cpu freq: 240000000 Hz
+I (184) app_init: Application information:
+I (188) app_init: Project name:     wolfssl_benchmark
+I (193) app_init: App version:      v5.9.4-stable-dirty
+I (198) app_init: Compile time:     Oct 27 2026 01:23:07
+I (203) app_init: ELF file SHA256:  1e004da3e...
+I (207) app_init: ESP-IDF:          v5.5.6
+I (211) efuse_init: Min chip rev:     v0.0
+I (215) efuse_init: Max chip rev:     v0.99 
+I (219) efuse_init: Chip rev:         v0.2
+I (223) heap_init: Initializing. RAM available for dynamic allocation:
+I (229) heap_init: At 3FC94078 len 00055698 (341 KiB): RAM
+I (234) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM
+I (239) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM
+I (244) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM
+I (250) spi_flash: detected chip: generic
+I (253) spi_flash: flash io: dio
+I (256) sleep_gpio: Configure to isolate all GPIO pins in sleep state
+I (263) sleep_gpio: Enable automatic switching of GPIO sleep configuration
+I (269) main_task: Started on CPU0
+I I�I (299) wolfssl_benchmark: ---------------- wolfSSL Benchmark Example -------------
+I (300) wolfssl_benchmark: --------------------------------------------------------
+I (303) wolfssl_benchmark: --------------------------------------------------------
+I (310) wolfssl_benchmark: ---------------------- BEGIN MAIN ----------------------
+I (318) wolfssl_benchmark: --------------------------------------------------------
+I (325) wolfssl_benchmark: --------------------------------------------------------
+I (333) wolfssl_benchmark: Stack Start: 0x3fc9bf70
+W (337) wolfssl_benchmark: Found WOLFSSL_ESP_NO_WATCHDOG, disabling...
+W (343) esp32_util: esp_DisableWatchdog TODO S3
+I (348) esp32_util: Extended Version and Platform Information.
+I (353) esp32_util: Chip revision: v0.2
+I (357) esp32_util: SSID and plain text WiFi password not displayed in startup logs.
+I (364) esp32_util:   Define SHOW_SSID_AND_PASSWORD to enable display.
+I (370) esp32_util: Using wolfSSL user_settings.h in C://esp//wolfssl//IDE//Espressif//ESP-IDF//examples//wolfssl_benchmark//components//wolfssl/include/user_settings.h
+I (385) esp32_util: LIBWOLFSSL_VERSION_STRING = 5.9.4
+I (390) esp32_util: LIBWOLFSSL_VERSION_HEX = 5009004
+I (395) esp32_util: ----------------------------------------------------------
+I (402) esp32_util: LIBWOLFSSL_CMAKE_OUTPUT:
+I (406) esp32_util: ----------------------------------------------------------
+I (413) esp32_util: CONFIG_ESP32S3_DEFAULT_CPU_FREQ_MHZ = 240 MHz
+I (418) esp32_util: Xthal_have_ccount = 1
+I (422) esp32_util: Stack HWM: 27136
+I (425) esp32_util: 
+I (427) esp32_util: Macro Name                 Defined   Not Defined
+I (433) esp32_util: ------------------------- --------- -------------
+I (440) esp32_util: NO_ESP32_CRYPT...........                 X
+I (445) esp32_util: NO_ESPIDF_DEFAULT........                 X
+I (451) esp32_util: HW_MATH_ENABLED..........     X
+I (455) esp32_util: WOLFSSL_SHA224...........     X
+I (460) esp32_util: WOLFSSL_SHA384...........     X
+I (465) esp32_util: WOLFSSL_SHA512...........     X
+I (469) esp32_util: WOLFSSL_SHA3.............     X
+I (474) esp32_util: HAVE_ED25519.............     X
+I (478) esp32_util: HAVE_AES_ECB.............                 X
+I (484) esp32_util: HAVE_AES_DIRECT..........                 X
+I (490) esp32_util: USE_FAST_MATH............                 X
+I (495) esp32_util: WOLFSSL_SP_MATH_ALL......     X
+I (500) esp32_util: SP_MATH..................                 X
+I (506) esp32_util: WOLFSSL_HW_METRICS.......     X
+I (510) esp32_util: RSA_LOW_MEM..............     X
+I (515) esp32_util: SMALL_SESSION_CACHE......                 X
+I (520) esp32_util: WC_NO_HARDEN.............                 X
+I (526) esp32_util: TFM_TIMING_RESISTANT.....     X
+I (531) esp32_util: ECC_TIMING_RESISTANT.....     X
+I (535) esp32_util: WC_NO_CACHE_RESISTANT....     X
+I (540) esp32_util: WC_AES_BITSLICED.........                 X
+I (546) esp32_util: WOLFSSL_AES_NO_UNROLL....                 X
+I (551) esp32_util: TFM_TIMING_RESISTANT.....     X
+I (556) esp32_util: ECC_TIMING_RESISTANT.....     X
+I (560) esp32_util: WC_RSA_BLINDING..........     X
+I (565) esp32_util: NO_WRITEV................     X
+I (570) esp32_util: FREERTOS.................     X
+I (574) esp32_util: NO_WOLFSSL_DIR...........     X
+I (579) esp32_util: WOLFSSL_NO_CURRDIR.......     X
+I (583) esp32_util: WOLFSSL_LWIP.............     X
+I (588) esp32_util: DEBUG_WOLFSSL............                 X
+I (594) esp32_util: WOLFSSL_DEBUG_CERTS......                 X
+I (599) esp32_util: NO_WOLFSSL_DEBUG_CERTS...                 X
+I (605) esp32_util: WOLFSSL_DEBUG_ERRORS_ONLY                 X
+I (611) esp32_util: 
+I (612) esp32_util: Compiler Optimization: Performance
+I (617) esp32_util: 
+I (619) esp32_util: CONFIG_IDF_TARGET = esp32s3
+I (623) esp32_util: Found WOLFSSL_ESP_NO_WATCHDOG
+I (628) esp32_util: CONFIG_MAIN_TASK_STACK_SIZE: 28672
+I (633) esp32_util: CONFIG_ESP_MAIN_TASK_STACK_SIZE: 28672
+I (638) esp32_util: CONFIG_TIMER_TASK_STACK_SIZE: 3584
+I (643) esp32_util: CONFIG_TIMER_TASK_STACK_DEPTH: 2048
+I (648) esp32_util: Stack HWM: 3fc9bf4f
+I (651) esp32_util: CONFIG_ESP32S3_DEFAULT_CPU_FREQ_MHZ = 240 MHz
+I (657) esp32_util: Xthal_have_ccount = 1
+I (661) esp32_util: ESP32_CRYPT is enabled for ESP32-S3.
+I (666) esp32_util: SINGLE_THREADED
+I (669) esp32_util: Boot count: 1
+I (672) wolfssl_benchmark: app_main CONFIG_BENCH_ARGV = -lng 0
+I (679) wolfssl_benchmark: Stack HWM: 26912
+
+wolfCrypt Benchmark (block bytes 1024, min 1.0 sec each)
+RNG SHA-256 DRBG          2700 KiB took 1.001 seconds, 2697.303 KiB/s Cycles per byte =  86.91 [heap 811 bytes (9 allocs), stack 0 bytes]
+AES-128-CBC-enc           8325 KiB took 1.002 seconds, 8308.383 KiB/s Cycles per byte =  28.22 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-128-CBC-dec           8375 KiB took 1.001 seconds, 8366.633 KiB/s Cycles per byte =  28.03 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-192-CBC-enc           2025 KiB took 1.011 seconds, 2002.967 KiB/s Cycles per byte = 117.03 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-192-CBC-dec           2075 KiB took 1.000 seconds, 2075.000 KiB/s Cycles per byte = 112.98 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-256-CBC-enc           8300 KiB took 1.001 seconds, 8291.708 KiB/s Cycles per byte =  28.28 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-256-CBC-dec           7975 KiB took 1.001 seconds, 7967.033 KiB/s Cycles per byte =  29.39 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-128-GCM-enc            600 KiB took 1.003 seconds,  598.205 KiB/s Cycles per byte = 391.60 [heap 349 bytes (3 allocs), stack 0 bytes]
+AES-128-GCM-dec            600 KiB took 1.016 seconds,  590.551 KiB/s Cycles per byte = 396.62 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-192-GCM-enc            550 KiB took 1.015 seconds,  541.872 KiB/s Cycles per byte = 432.40 [heap 349 bytes (3 allocs), stack 0 bytes]
+AES-192-GCM-dec            550 KiB took 1.026 seconds,  536.062 KiB/s Cycles per byte = 437.45 [heap 320 bytes (1 allocs), stack 0 bytes]
+AES-256-GCM-enc            600 KiB took 1.013 seconds,  592.300 KiB/s Cycles per byte = 395.59 [heap 349 bytes (3 allocs), stack 0 bytes]
+AES-256-GCM-dec            600 KiB took 1.025 seconds,  585.366 KiB/s Cycles per byte = 400.63 [heap 320 bytes (1 allocs), stack 0 bytes]
+GMAC Default               775 KiB took 1.032 seconds,  750.969 KiB/s Cycles per byte = 312.18 [heap 0 bytes (0 allocs), stack 0 bytes]
+AES-128-CTR               3025 KiB took 1.001 seconds, 3021.978 KiB/s Cycles per byte =  77.54 [heap 0 bytes (0 allocs), stack 0 bytes]
+AES-192-CTR               2000 KiB took 1.005 seconds, 1990.050 KiB/s Cycles per byte = 117.69 [heap 0 bytes (0 allocs), stack 0 bytes]
+AES-256-CTR               2875 KiB took 1.000 seconds, 2875.000 KiB/s Cycles per byte =  81.48 [heap 0 bytes (0 allocs), stack 0 bytes]
+3DES                       675 KiB took 1.013 seconds,  666.338 KiB/s Cycles per byte = 351.49 [heap 528 bytes (2 allocs), stack 0 bytes]
+MD5                      12225 KiB took 1.001 seconds, 12212.787 KiB/s Cycles per byte =  19.19 [heap 112 bytes (2 allocs), stack 0 bytes]
+SHA                      27675 KiB took 1.000 seconds, 27675.000 KiB/s Cycles per byte =   8.46 [heap 136 bytes (2 allocs), stack 0 bytes]
+SHA-224                  27650 KiB took 1.000 seconds, 27650.000 KiB/s Cycles per byte =   8.47 [heap 156 bytes (2 allocs), stack 0 bytes]
+SHA-256                  27350 KiB took 1.000 seconds, 27350.000 KiB/s Cycles per byte =   8.56 [heap 160 bytes (2 allocs), stack 0 bytes]
+SHA-384                   1925 KiB took 1.006 seconds, 1913.519 KiB/s Cycles per byte = 122.50 [heap 416 bytes (3 allocs), stack 0 bytes]
+SHA-512                  27200 KiB took 1.000 seconds, 27200.000 KiB/s Cycles per byte =   8.61 [heap 304 bytes (2 allocs), stack 0 bytes]
+SHA-512/224               1925 KiB took 1.006 seconds, 1913.519 KiB/s Cycles per byte = 122.50 [heap 396 bytes (3 allocs), stack 0 bytes]
+SHA-512/256               1925 KiB took 1.006 seconds, 1913.519 KiB/s Cycles per byte = 122.49 [heap 400 bytes (3 allocs), stack 0 bytes]
+SHA3-224                  1450 KiB took 1.007 seconds, 1439.921 KiB/s Cycles per byte = 162.75 [heap 436 bytes (2 allocs), stack 0 bytes]
+SHA3-256                  1375 KiB took 1.013 seconds, 1357.354 KiB/s Cycles per byte = 172.65 [heap 440 bytes (2 allocs), stack 0 bytes]
+SHA3-384                  1050 KiB took 1.008 seconds, 1041.667 KiB/s Cycles per byte = 224.94 [heap 456 bytes (2 allocs), stack 0 bytes]
+SHA3-512                   725 KiB took 1.000 seconds,  725.000 KiB/s Cycles per byte = 323.28 [heap 472 bytes (2 allocs), stack 0 bytes]
+SHAKE128                  1675 KiB took 1.002 seconds, 1671.657 KiB/s Cycles per byte = 140.23 [heap 576 bytes (2 allocs), stack 0 bytes]
+SHAKE256                  1375 KiB took 1.013 seconds, 1357.354 KiB/s Cycles per byte = 172.66 [heap 544 bytes (2 allocs), stack 0 bytes]
+HMAC-MD5                 12100 KiB took 1.001 seconds, 12087.912 KiB/s Cycles per byte =  19.39 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA                 27150 KiB took 1.000 seconds, 27150.000 KiB/s Cycles per byte =   8.63 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA224              27100 KiB took 1.000 seconds, 27100.000 KiB/s Cycles per byte =   8.65 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA256              26825 KiB took 1.000 seconds, 26825.000 KiB/s Cycles per byte =   8.74 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA384               1900 KiB took 1.009 seconds, 1883.053 KiB/s Cycles per byte = 124.45 [heap 896 bytes (2 allocs), stack 0 bytes]
+HMAC-SHA512              26425 KiB took 1.000 seconds, 26425.000 KiB/s Cycles per byte =   8.87 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA3-256             1350 KiB took 1.011 seconds, 1335.312 KiB/s Cycles per byte = 175.52 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA3-384             1050 KiB took 1.021 seconds, 1028.404 KiB/s Cycles per byte = 227.80 [heap 768 bytes (1 allocs), stack 0 bytes]
+HMAC-SHA3-512              725 KiB took 1.008 seconds,  719.246 KiB/s Cycles per byte = 326.13 [heap 768 bytes (1 allocs), stack 0 bytes]
+PBKDF2                       1 KiB took 1.022 seconds,    1.284 KiB/s Cycles per byte = 182535.87 [heap 832 bytes (2 allocs), stack 0 bytes]
+RSA     2048   public        86 ops took 1.013 sec, avg 11.779 ms,    84.896 ops/sec, 243075917 cycles 2826464.15 Cycles/op [heap 4697 bytes (6 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+RSA     2048  private         2 ops took 2.915 sec, avg 1457.500 ms,     0.686 ops/sec, 699466179 cycles 349733089.50 Cycles/op [heap 37696 bytes (9 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ML-KEM 512    128  key gen       336 ops took 1.000 sec, avg 2.976 ms,   336.000 ops/sec, 240024529 cycles 714358.72 Cycles/op [heap 3578 bytes (2 allocs), stack 0 bytes]
+    keccak: 21.0 calls/op, 502002 cycles/op
+ML-KEM 512    128    encap       296 ops took 1.002 sec, avg 3.385 ms,   295.409 ops/sec, 240388180 cycles 812122.23 Cycles/op [heap 10330 bytes (5 allocs), stack 0 bytes]
+    keccak: 20.0 calls/op, 494937 cycles/op
+ML-KEM 512    128    decap       210 ops took 1.004 sec, avg 4.781 ms,   209.163 ops/sec, 241126181 cycles 1148219.91 Cycles/op [heap 7930 bytes (3 allocs), stack 0 bytes]
+    keccak: 26.0 calls/op, 659745 cycles/op
+ML-KEM 768    192  key gen       212 ops took 1.008 sec, avg 4.755 ms,   210.317 ops/sec, 241847146 cycles 1140788.42 Cycles/op [heap 6650 bytes (2 allocs), stack 0 bytes]
+    keccak: 34.0 calls/op, 803067 cycles/op
+ML-KEM 768    192    encap       186 ops took 1.004 sec, avg 5.398 ms,   185.259 ops/sec, 241030504 cycles 1295862.92 Cycles/op [heap 14426 bytes (5 allocs), stack 0 bytes]
+    keccak: 35.0 calls/op, 839107 cycles/op
+ML-KEM 768    192    decap       140 ops took 1.005 sec, avg 7.179 ms,   139.303 ops/sec, 241250361 cycles 1723216.86 Cycles/op [heap 12346 bytes (3 allocs), stack 0 bytes]
+    keccak: 44.0 calls/op, 1068927 cycles/op
+ML-KEM 1024   256  key gen       130 ops took 1.000 sec, avg 7.692 ms,   130.000 ops/sec, 240054017 cycles 1846569.36 Cycles/op [heap 10746 bytes (2 allocs), stack 0 bytes]
+    keccak: 58.0 calls/op, 1356362 cycles/op
+ML-KEM 1024   256    encap       116 ops took 1.014 sec, avg 8.741 ms,   114.398 ops/sec, 243349861 cycles 2097843.63 Cycles/op [heap 19546 bytes (5 allocs), stack 0 bytes]
+    keccak: 59.0 calls/op, 1406931 cycles/op
+ML-KEM 1024   256    decap        90 ops took 1.005 sec, avg 11.167 ms,    89.552 ops/sec, 241308300 cycles 2681203.33 Cycles/op [heap 17946 bytes (3 allocs), stack 0 bytes]
+    keccak: 71.0 calls/op, 1719449 cycles/op
+ECC   [      SECP256R1]   256  key gen        16 ops took 1.051 sec, avg 65.687 ms,    15.224 ops/sec, 252060892 cycles 15753805.75 Cycles/op [heap 4612 bytes (6 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ECDHE [      SECP256R1]   256    agree        16 ops took 1.048 sec, avg 65.500 ms,    15.267 ops/sec, 251522099 cycles 15720131.19 Cycles/op [heap 9495 bytes (15 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ECDSA [      SECP256R1]   256     sign        14 ops took 1.022 sec, avg 73.000 ms,    13.699 ops/sec, 245226816 cycles 17516201.14 Cycles/op [heap 2088 bytes (7 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ECDSA [      SECP256R1]   256   verify         8 ops took 1.053 sec, avg 131.625 ms,     7.597 ops/sec, 252720930 cycles 31590116.25 Cycles/op [heap 2452 bytes (7 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+CURVE  25519  key gen         6 ops took 1.079 sec, avg 179.833 ms,     5.561 ops/sec, 258967278 cycles 43161213.00 Cycles/op [heap 119 bytes (3 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+CURVE  25519    agree         6 ops took 1.066 sec, avg 177.667 ms,     5.629 ops/sec, 255938273 cycles 42656378.83 Cycles/op [heap 119 bytes (3 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ED     25519  key gen         6 ops took 1.079 sec, avg 179.833 ms,     5.561 ops/sec, 259062249 cycles 43177041.50 Cycles/op [heap 240 bytes (3 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ED     25519     sign         6 ops took 1.093 sec, avg 182.167 ms,     5.489 ops/sec, 262510063 cycles 43751677.17 Cycles/op [heap 480 bytes (4 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ED     25519   verify         4 ops took 1.511 sec, avg 377.750 ms,     2.647 ops/sec, 362573553 cycles 90643388.25 Cycles/op [heap 240 bytes (1 allocs), stack 0 bytes]
+    keccak: 0.0 calls/op, 0 cycles/op
+ML-DSA    44  key gen        74 ops took 1.018 sec, avg 13.757 ms,    72.692 ops/sec, 244467306 cycles 3303612.24 Cycles/op [heap 42563 bytes (6 allocs), stack 0 bytes]
+    keccak: 107.0 calls/op, 2551435 cycles/op
+ML-DSA    44     sign        34 ops took 1.021 sec, avg 30.029 ms,    33.301 ops/sec, 244950815 cycles 7204435.74 Cycles/op [heap 51336 bytes (3 allocs), stack 0 bytes]
+    keccak: 184.8 calls/op, 4405869 cycles/op
+ML-DSA    44   verify        78 ops took 1.017 sec, avg 13.038 ms,    76.696 ops/sec, 244021131 cycles 3128476.04 Cycles/op [heap 30536 bytes (2 allocs), stack 0 bytes]
+    keccak: 103.0 calls/op, 2413684 cycles/op
+ML-DSA    65  key gen        44 ops took 1.010 sec, avg 22.955 ms,    43.564 ops/sec, 242451065 cycles 5510251.48 Cycles/op [heap 62019 bytes (6 allocs), stack 0 bytes]
+    keccak: 188.0 calls/op, 4417469 cycles/op
+ML-DSA    65     sign        18 ops took 1.020 sec, avg 56.667 ms,    17.647 ops/sec, 244669725 cycles 13592762.50 Cycles/op [heap 78984 bytes (3 allocs), stack 0 bytes]
+    keccak: 341.1 calls/op, 8085405 cycles/op
+ML-DSA    65   verify        46 ops took 1.004 sec, avg 21.826 ms,    45.817 ops/sec, 240897850 cycles 5236909.78 Cycles/op [heap 49992 bytes (2 allocs), stack 0 bytes]
+    keccak: 178.0 calls/op, 4151413 cycles/op
+ML-DSA    87  key gen        26 ops took 1.003 sec, avg 38.577 ms,    25.922 ops/sec, 240682460 cycles 9257017.69 Cycles/op [heap 94787 bytes (6 allocs), stack 0 bytes]
+    keccak: 331.0 calls/op, 7710817 cycles/op
+ML-DSA    87     sign        14 ops took 1.000 sec, avg 71.429 ms,    14.000 ops/sec, 240045305 cycles 17146093.21 Cycles/op [heap 121992 bytes (3 allocs), stack 0 bytes]
+    keccak: 472.4 calls/op, 11046164 cycles/op
+ML-DSA    87   verify        28 ops took 1.034 sec, avg 36.929 ms,    27.079 ops/sec, 248190227 cycles 8863936.68 Cycles/op [heap 82760 bytes (2 allocs), stack 0 bytes]
+    keccak: 315.0 calls/op, 7296191 cycles/op
+RNG      256 SHA256 Init/Free   1188 ops took 1.000 sec, avg 0.842 ms,  1188.000 ops/sec, 239995725 cycles 202016.60 Cycles/op
+Benchmark complete
+total   Allocs   =    126414
+total   Deallocs =    126414
+total   Bytes    =  58353261
+peak    Bytes    =    137283
+current Bytes    =         0
+I (77098) wolfssl_benchmark: Stack used: 896
+
+I (77103) wolf_hw_sha: --------------------------------------------------------
+I (77110) wolf_hw_sha: -------------  wolfSSL ESP HW SHA Metrics  -------------
+I (77117) wolf_hw_sha: --------------------------------------------------------
+I (77124) wolf_hw_sha: esp_sha_hw_copy_ct            = 0
+I (77129) wolf_hw_sha: esp_sha1_hw_usage_ct          = 0
+I (77134) wolf_hw_sha: esp_sha1_sw_fallback_usage_ct = 0
+I (77139) wolf_hw_sha: esp_sha_reverse_words_ct      = 0
+I (77144) wolf_hw_sha: esp_sha1_hw_hash_usage_ct     = 882651
+I (77149) wolf_hw_sha: esp_sha2_224_hw_hash_usage_ct = 881442
+I (77155) wolf_hw_sha: esp_sha2_256_hw_hash_usage_ct = 1183637
+I (77160) wolf_hw_sha: esp_byte_reversal_checks_ct   = 0
+I (77165) wolf_hw_sha: esp_byte_reversal_needed_ct   = 0
+I (77170) wolfssl_esp32_mp: 
+I (77173) wolfssl_esp32_mp: esp_mp_mul HW acceleration enabled.
+I (77179) wolfssl_esp32_mp: Number of calls to esp_mp_mul: 0
+I (77184) wolfssl_esp32_mp: Number of calls to esp_mp_mul with tiny operands: 0
+I (77191) wolfssl_esp32_mp: Number of calls to esp_mp_mul HW operand exceeded: 0
+I (77198) wolfssl_esp32_mp: Success: no esp_mp_mul() errors.
+I (77204) wolfssl_esp32_mp: 
+I (77206) wolfssl_esp32_mp: esp_mp_mulmod HW acceleration enabled.
+I (77212) wolfssl_esp32_mp: Number of calls to esp_mp_mulmod: 0
+I (77218) wolfssl_esp32_mp: Number of calls to esp_mp_mulmod HW operand exceeded: 0
+I (77225) wolfssl_esp32_mp: Number of fallback to SW mp_mulmod: 0
+I (77231) wolfssl_esp32_mp: Success: no esp_mp_mulmod errors.
+I (77236) wolfssl_esp32_mp: Success: no esp_mp_mulmod even mod.
+I (77242) wolfssl_esp32_mp: Success: no esp_mp_mulmod small x or y.
+I (77248) wolfssl_esp32_mp: 
+I (77251) wolfssl_esp32_mp: Number of calls to esp_mp_exptmod: 0
+I (77256) wolfssl_esp32_mp: Number of calls to esp_mp_exptmod HW operand exceeded: 0
+I (77264) wolfssl_esp32_mp: Number of fallback to SW mp_exptmod: 0
+I (77270) wolfssl_esp32_mp: Success: no esp_mp_exptmod errors.
+I (77275) wolfssl_esp32_mp: Max N->used: esp_mp_max_used = 0
+I (77281) wolfssl_esp32_mp: Max hw wait timeout: esp_mp_max_wait_timeout = 0
+I (77287) wolfssl_esp32_mp: Max calc timeout: esp_mp_max_timeout = 0x00000000
+I (77294) wolf_hw_aes: --------------------------------------------------------
+I (77301) wolf_hw_aes: -------------  wolfSSL ESP HW AES Metrics  -------------
+I (77308) wolf_hw_aes: --------------------------------------------------------
+I (77315) wolf_hw_aes: esp_aes_unsupported_length_usage_ct = 4
+I (77321) wolfssl_benchmark: Stack HWM: 26016
+
+I (77325) wolfssl_benchmark: loops = 1
+I (77329) wolfssl_benchmark: Stack HWM: 26016
+I (77333) wolfssl_benchmark: Stack used: 2656
+I (77337) wolfssl_benchmark: 
+
+Device: esp32s3
+
+Exit code: 0 
+
+Success!
+
+WOLFSSL_COMPLETE
+
+If running from idf.py monitor, press twice: Ctrl+]
