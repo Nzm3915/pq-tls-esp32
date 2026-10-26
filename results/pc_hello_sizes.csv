@@ -1,0 +1,4 @@
+group,client_hello_bytes,server_hello_bytes,key_share_client_bytes,key_share_server_bytes
+X25519,205,86,32,32
+X25519MLKEM768,1405,1174,1216,1120
+ML_KEM_768,1373,1142,1184,1088
