@@ -55,6 +55,24 @@ TLSクライアント側の鍵交換コスト（鍵生成＋共有値計算）�
 
 PCではML-KEM単体はX25519より速く、ハイブリッドでも計算コストは約1.6倍・絶対値0.1 ms程度に留まる。PCでの耐量子化の代償は計算時間ではなく通信量である。この関係がマイコン（ESP32-S3）でも成り立つかが、次のフェーズの検証対象となる。
 
+## 結果3：暗号演算ベンチマーク（ESP32-S3、Phase 2）
+
+条件：ESP32-S3-WROOM-1-N16R8（240 MHz、シングルコア動作）、ESP-IDF v5.5.6、wolfSSL v5.9.4-stable、PSRAM有効（8 MB、40 MHz）、wolfSSL公式 `wolfssl_benchmark` サンプル。数学ライブラリは既定の `USE_FAST_MATH`（`WOLFSSL_SP_MATH_ALL` 無効）。ML-KEMはmenuconfigの `ESP_WOLFSSL_ENABLE_MLKEM`、ML-DSAとSHA-3は `user_settings.h` に `WOLFSSL_SHA3` / `WOLFSSL_SHAKE128` / `WOLFSSL_SHAKE256` / `WOLFSSL_HAVE_MLDSA` を追加して有効化。全値は `results/esp32s3_benchmark_psram_fastmath.csv`。
+
+| 比較 | PC（ms） | ESP32-S3（ms） | ESP32上の比 |
+| --- | ---: | ---: | --- |
+| X25519 鍵交換（keygen + agree） | 0.071 | 695.8 | 基準 |
+| ML-KEM-768（keygen + decap） | 0.042 | 13.4 | X25519の約1/52 |
+| X25519MLKEM768（合計の推定） | 0.113 | 約709 | X25519比 +約2% |
+| ECDSA P-256 検証 | 0.193 | 565.0 | 基準 |
+| ML-DSA-44 検証 | 0.041 | 16.0 | ECDSAの約1/35 |
+
+PCではML-KEMとX25519の差は1.7倍だったが、ESP32-S3では約52倍に広がった。ハイブリッド鍵交換の計算時間はほぼ全てX25519が占め、耐量子部分の追加コストは約2%に留まる。
+
+ハッシュ処理（`results/esp32s3_hash_throughput.csv`）：SHA-256はハードウェア加速で約12 MB/s、SHA3-256は加速なしで約1.2 MB/s（約1/10）。
+
+注意（公平性）：楕円曲線系は既定の `USE_FAST_MATH` で測定しており、wolfSSLの高速版 `WOLFSSL_SP_MATH_ALL` を使えば大幅に速くなる可能性がある。比較の結論は、SP数学ライブラリでの再測定後に確定する。
+
 ## 再現手順（Phase 1）
 
 ```bash
@@ -77,7 +95,11 @@ sudo -v && ./scripts/capture.sh
 ## 今後
 
 - [x] Phase 1：PCでの基準測定（ベンチマーク、ハンドシェイクサイズ）
-- [ ] Phase 2：ESP32-S3（N16R8）での暗号演算ベンチマーク（PSRAM有無、`WOLFSSL_SMALL_STACK`有無）
+- [ ] Phase 2：ESP32-S3（N16R8）での暗号演算ベンチマーク
+  - [x] 速度（PSRAM有効、FAST_MATH）
+  - [ ] 速度（SP_MATH_ALL、公平性の確認）
+  - [ ] メモリ使用量（ヒープ）
+  - [ ] PSRAM無効での比較
 - [ ] Phase 3：ESP32-S3 ⇔ PC間のTLSハンドシェイク測定（鍵交換×証明書）
 - [ ] Phase 4：PVDF振動センサノードとしての統合デモ
 

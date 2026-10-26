@@ -1,0 +1,7 @@
+algorithm,kib_per_sec,hw_accelerated
+SHA-256,12312.687,yes
+SHA-512,13250.000,yes
+SHA3-256,1235.178,no
+SHA3-512,664.370,no
+SHAKE128,1515.905,no
+SHAKE256,1236.400,no
