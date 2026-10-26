@@ -1,0 +1,79 @@
+diff --git a/wolfcrypt/benchmark/benchmark.c b/wolfcrypt/benchmark/benchmark.c
+index 124fec2..42e48d2 100644
+--- a/wolfcrypt/benchmark/benchmark.c
++++ b/wolfcrypt/benchmark/benchmark.c
+@@ -2788,10 +2788,20 @@ static WC_INLINE void bench_stats_init(void)
+     INIT_CYCLE_COUNTER
+ }
+ 
++#ifdef WC_KECCAK_PROFILE
++/* pq-tls-esp32: Keccak counters defined in wolfcrypt/src/sha3.c */
++extern volatile word32 wc_keccak_calls;
++extern volatile word64 wc_keccak_cycles;
++#endif
++
+ static WC_INLINE void bench_stats_start(int* count, double* start)
+ {
+     *count = 0;
+     *start = current_time(1);
++#ifdef WC_KECCAK_PROFILE
++    wc_keccak_calls = 0;
++    wc_keccak_cycles = 0;
++#endif
+ 
+ #if defined(WC_BENCH_HEAP_TRACKING) || defined(WC_BENCH_STACK_TRACKING)
+     if (bench_stats_resources_prepared) {
+@@ -3827,6 +3837,14 @@ static void bench_stats_asym_finish_ex(const char* algo, int strength,
+     kernel_fpu_end();
+ #endif
+ 
++#ifdef WC_KECCAK_PROFILE
++    if (count > 0) {
++        printf("    keccak: %lu.%lu calls/op, %lu cycles/op\n",
++               (unsigned long)(wc_keccak_calls / (word32)count),
++               (unsigned long)((wc_keccak_calls * 10U / (word32)count) % 10U),
++               (unsigned long)(wc_keccak_cycles / (word64)count));
++    }
++#endif
+     bench_stats_prepare();
+     TEST_SLEEP();
+ } /* bench_stats_asym_finish_ex */
+diff --git a/wolfcrypt/src/sha3.c b/wolfcrypt/src/sha3.c
+index bc6d77c..7bf9cdc 100644
+--- a/wolfcrypt/src/sha3.c
++++ b/wolfcrypt/src/sha3.c
+@@ -757,6 +757,16 @@ void BlockSha3(word64* s)
+ 
+ #else /* !WC_SHA3_SPLIT64 */
+ 
++#ifdef WC_KECCAK_PROFILE
++/* pq-tls-esp32: count Keccak-f[1600] calls and CPU cycles (ESP-IDF only).
++ * The real permutation is renamed to BlockSha3_raw and wrapped below. */
++#include "esp_cpu.h"
++volatile word32 wc_keccak_calls = 0;
++volatile word64 wc_keccak_cycles = 0;
++void BlockSha3_raw(word64* s);
++#define BlockSha3 BlockSha3_raw
++#endif
++
+ void BlockSha3(word64* s)
+ {
+     word64 n[25];
+@@ -779,6 +789,17 @@ void BlockSha3(word64* s)
+     }
+ }
+ 
++#ifdef WC_KECCAK_PROFILE
++#undef BlockSha3
++void BlockSha3(word64* s)
++{
++    word32 t0 = (word32)esp_cpu_get_cycle_count();
++    BlockSha3_raw(s);
++    wc_keccak_cycles += (word32)((word32)esp_cpu_get_cycle_count() - t0);
++    wc_keccak_calls++;
++}
++#endif
++
+ #endif /* WC_SHA3_SPLIT64 */
+ #endif /* WC_SHA3_SW_KECCAK */
+ #endif /* !WOLFSSL_SHA3_SMALL */

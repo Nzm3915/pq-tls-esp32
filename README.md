@@ -141,6 +141,14 @@ TLSクライアント（ESP32側）の計算時間：
 
 ヒープ（各演算のピーク）：ECDSA検証 2.4 KB に対しML-DSA-44検証 30.5 KB（約12倍）。鍵交換はP-256（agree 9.5 KB）とML-KEM-768（decap 12.3 KB）でほぼ同等。耐量子化で増えるRAMの大部分は署名検証側から来ており、H2と同じ向き。計算時間は耐量子の方が約10倍速い一方、メモリは署名で約12倍重い、というトレードオフになる。
 
+## 結果7：PSRAMの有無（ESP32-S3、-O2、SP）
+
+menuconfigで「Support for external, SPI-connected RAM」を無効にし、他は結果6と同じ条件で測定した。全値は `results/esp32s3_psram_on_vs_off.csv`。
+
+- 全演算で速度差は±2%以内、ヒープ使用量は同一だった。ML-DSAのsignだけ±13%前後ばらつくが、増減の向きが揃っておらず、乱数による再試行回数の違いによるものと考えられる（verifyとkeygenは±0.2%以内）。
+- 事前の仮説「16 KBを超える確保はPSRAMに置かれ、PSRAMを切るとML-DSAが速くなる」は否定された。理由：ESP-IDF版wolfSSLのメモリ確保は `pvPortMalloc` を通り、ESP-IDF v5.5ではこれが `heap_caps_malloc(size, MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT)`、つまり**内蔵RAMのみ**から確保する（`components/freertos/heap_idf.c`）。`WOLFSSL_TRACK_MEMORY` 有効時の `TrackMalloc` も同じく `pvPortMalloc` を使う。
+- 含意：既定の構成では、PSRAMはwolfSSLのメモリ予算を広げない。TLSで使えるのは内蔵RAMのヒープ（本ボードで約400 KB）だけであり、Phase 3ではWi-Fi・lwIPとこの内蔵RAMを取り合うことになる。wolfSSLをPSRAMに載せたい場合は、`wolfSSL_SetAllocators()` で確保関数を差し替える必要がある（今後の実験候補）。
+
 ## 再現手順（Phase 1）
 
 ```bash
@@ -167,9 +175,9 @@ sudo -v && ./scripts/capture.sh
   - [x] 速度（PSRAM有効、FAST_MATH）
   - [x] 速度（コンパイラ最適化 -O2、公平性の確認その1）
   - [x] 速度（P-256をSP数学ライブラリで、公平性の確認その2）
-  - [ ] H3：ML-KEM内のKeccak置換の時間を直接計測
+  - [ ] H3：ML-KEM内のKeccak置換の時間を直接計測（`patches/keccak_profile.patch` を wolfSSL v5.9.4 に適用し、`user_settings.h` に `#define WC_KECCAK_PROFILE` を追加）
   - [x] メモリ使用量（ヒープ、PSRAM有効、FAST_MATH）
-  - [ ] PSRAM無効での比較
+  - [x] PSRAM無効での比較
 - [ ] Phase 3：ESP32-S3 ⇔ PC間のTLSハンドシェイク測定（鍵交換×証明書）
 - [ ] Phase 4：PVDF振動センサノードとしての統合デモ
 
